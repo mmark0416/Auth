@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import customFetch from "../utils/CustomFetch";
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 
 const VerifyEmail = () => {
   const [loading, setLoading] = useState(false);

@@ -6,10 +6,13 @@ import {
   verifyEmail,
   logout,
   getUser,
+  forgotPassword,
+  resetPassword,
 } from "../controllers/Auth.controller.js";
 import {
   validateLoginInput,
   validateRegisterInput,
+  validateResetPasswordInput
 } from "../middleWare/Validation.js";
 import { authenticationUser } from "../middleWare/authentication.js";
 
@@ -20,5 +23,7 @@ router.post("/login", validateLoginInput, login);
 router.post("/verify-email", verifyEmail);
 router.post("/logout", authenticationUser, logout);
 router.post("/user", authenticationUser, getUser);
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password",validateResetPasswordInput, resetPassword);
 
 export default router;

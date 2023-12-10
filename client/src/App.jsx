@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, useLocation } from "react-router-dom";
 import React from "react";
 
 //components
@@ -12,10 +12,14 @@ import VerifyEmail from "./Pages/VerifyEmail";
 import Home from "./Pages/Home";
 import Error from "./Pages/Error";
 import ProtectedRoute from "./Pages/ProtectedRoute";
+import ForgetPassword from "./Pages/ForgetPassword";
+import ResetPassword from "./Pages/ResetPassword";
 
 //actions
 import { action as registerAction } from "./Pages/Register";
 import { action as loginAction } from "./Pages/Login";
+import { action as forgotPasswordAction } from "./Pages/ForgetPassword";
+import { action as ResetPasswordAction } from "./Pages/ResetPassword";
 
 //loaders
 import { loader as DashboardLodaer } from "./Pages/Dashboard";
@@ -36,6 +40,11 @@ const App = () => {
           action: loginAction,
         },
         {
+          path: "forget-password/",
+          element: <ForgetPassword />,
+          action: forgotPasswordAction,
+        },
+        {
           path: "register/",
           element: <Register />,
           action: registerAction,
@@ -43,6 +52,11 @@ const App = () => {
         {
           path: "verify-email/",
           element: <VerifyEmail />,
+        },
+        {
+          path: "reset-password/",
+          element: <ResetPassword />,
+          action: ResetPasswordAction,
         },
         {
           path: "dashboard/",

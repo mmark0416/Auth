@@ -33,3 +33,8 @@ export const validateRegisterInput = withValidationErrorHandler([
   body("password").notEmpty().withMessage("password must be provided"),
   body("name").notEmpty().withMessage("Name must be provided"),
 ]);
+
+export const validateResetPasswordInput = withValidationErrorHandler([
+  body("newPassword").notEmpty().withMessage("password must be provided"),
+  body("newPasswordAgain").notEmpty().withMessage("Name must be provided"),
+]);

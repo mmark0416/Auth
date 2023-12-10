@@ -3,10 +3,10 @@ export default {
   port: 587,
   secure: false,
   auth: {
-    user: "filiberto.balistreri@ethereal.email",
-    pass: "q25kqtVHCmxUmSx11n",
+    user: process.env.ETHEREAL_USER,
+    pass: process.env.ETHEREAL_PASSWORD,
   },
   tls: {
-    rejectUnauthorized: false
-}
+    rejectUnauthorized: false,
+  },
 };

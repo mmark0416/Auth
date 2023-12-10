@@ -8,6 +8,7 @@ import { attachCookiesToResponse } from "../utils/jwt.js";
 import { StatusCodes } from "http-status-codes";
 import crypto from "crypto";
 import { sendVerificationEmail } from "../utils/sendVerificationEmail.js";
+import { sendForgotPasswordEmail } from "../utils/sendResetPasswordEmail.js";
 
 export const register = async (req, res) => {
   const { email, name, password } = req.body;
@@ -113,4 +114,62 @@ export const logout = async (req, res) => {
 
 export const getUser = (req, res) => {
   res.status(StatusCodes.OK).json({ user: req.user });
+};
+
+export const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (!user) throw new UnauthenticatedError("Invalid email");
+
+  const tempOrigin = req.get("origin");
+
+  const passwordToken = crypto.randomBytes(70).toString("hex");
+
+  const tenMinutes = 1000 * 60 * 10;
+  const passwordTokenExpirationDate = new Date(Date.now() + tenMinutes);
+
+  user.passwordToken = passwordToken;
+  user.passwordTokenExpirationData = passwordTokenExpirationDate;
+  await user.save();
+
+  await sendForgotPasswordEmail({
+    email: user.email,
+    name: user.name,
+    passwordToken,
+    origin: tempOrigin,
+  });
+
+  res
+    .status(StatusCodes.OK)
+    .json({ msg: "Your reset password link was sent to your email" });
+};
+
+export const resetPassword = async (req, res) => {
+  const { newPassword, newPasswordAgain, token, email } = req.body;
+
+  if (newPassword !== newPasswordAgain)
+    throw new BadRequestError("Password must match");
+
+  const user = await User.findOne({ email });
+
+  if (!user) throw new UnauthenticatedError("Invalid email");
+
+  const currentDate = new Date();
+
+  if (
+    user.passwordToken === token &&
+    user.passwordTokenExpirationData > currentDate
+  ) {
+    user.password = newPassword;
+    user.passwordToken = null;
+    user.passwordTokenExpirationData = null;
+    await user.save();
+  } else {
+    console.log("here");
+    throw new UnauthenticatedError("Invalid token");
+  }
+
+  res.status(StatusCodes.OK).json({ msg: "reste password " });
 };

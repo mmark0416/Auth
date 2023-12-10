@@ -23,8 +23,12 @@ const UserSchema = new mongoose.Schema(
     verificationToken: {
       type: String,
     },
-    verified: {
-      
+    verified: Date,
+    passwordToken: {
+      type: String,
+    },
+    passwordTokenExpirationData: {
+      type: Date,
     },
     role: {
       type: String,
